@@ -48,12 +48,13 @@ Spring Cloud’s annotation based approach provides a low-barrier entry to the N
 Dependency:
 
 1.	To get started : add the following dependency to your pom xml (or accordingly to gradle build file)
-```
-<dependency>
-    <groupId>org.springframework.cloud</groupId>
-    <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
-</dependency>
-```        
+{{< highlight go "linenos=table" >}}
+<dependency>  
+    <groupId>org.springframework.cloud</groupId>  
+    <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>  
+</dependency>  
+{{< / highlight >}}
+       
 2.	Add `@EnableCircuitBreaker` to the `SpringApplication` class
 3.	Wrap the method which makes the outbound call with `@HystrixCommand` annotation
 
