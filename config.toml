@@ -2,7 +2,7 @@ baseURL = "https://anishpc.netlify.com/"
 title = "Techresting"
 languageCode = "en-us"
 paginate = "10" # Number of posts per page
-theme = "hugo_theme_beg"
+theme = "beg"
 #googleAnalytics = "UA-XXXXXXXX-XX" # Optional
 #disqusShortname = "XYW"
 
