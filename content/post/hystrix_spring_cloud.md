@@ -25,6 +25,7 @@ The Netflix Hystrix library has been built on this idea of circuit breaker for w
 
 In a single application (monolith or otherwise), failures can be caught as exceptions and handled accordingly. However, with the wide adoption of microservices, there are a different set of failures which need to be handled for the system to be resilient.
 If we have to go by the book ‘Release It’, Hystrix adopts the following Stability patterns:
+
 * Circuit Breaker
 * Timeouts (slow responses from downstream applications)
 * Bulkheads 
@@ -45,6 +46,7 @@ Spring Cloud’s annotation based approach provides a low-barrier entry to the N
 ## Show me the code
 
 Dependency:
+
 1.	To get started : add the following dependency to your pom xml (or accordingly to gradle build file)
 ```
 <dependency>
@@ -54,3 +56,7 @@ Dependency:
 ```        
 2.	Add `@EnableCircuitBreaker` to the `SpringApplication` class
 3.	Wrap the method which makes the outbound call with `@HystrixCommand` annotation
+
+
+Standing on the shoulders of giants :
+
