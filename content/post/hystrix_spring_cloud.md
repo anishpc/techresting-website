@@ -21,7 +21,7 @@ The Netflix Hystrix library has been built on this idea of circuit breaker for w
 
 ***
 
-## Why Now
+### Why Now
 
 In a single application (monolith or otherwise), failures can be caught as exceptions and handled accordingly. However, with the wide adoption of microservices, there are a different set of failures which need to be handled for the system to be resilient.
 If we have to go by the book ‘Release It’, Hystrix adopts the following Stability patterns:
@@ -39,11 +39,11 @@ Resilient systems are one which isolate the failure and prevent errors in one sy
 Hystrix was designed to solve these types of failures and provides a dashboard for near-realtime monitoring for operations
 Read this (https://github.com/Netflix/Hystrix/wiki/FAQ%20:%20General#where-does-the-name-come-from) to know where the name comes from.
 
-## Hystrix & Spring Cloud
+### Hystrix & Spring Cloud
 
 Spring Cloud’s annotation based approach provides a low-barrier entry to the Netflix Hystrix library, which internally has much complexity built into it. 
 
-## Show me the code
+### Show me the code
 
 Dependency:
 
@@ -59,5 +59,5 @@ Dependency:
 3.	Wrap the method which makes the outbound call with `@HystrixCommand` annotation
 
 
-Standing on the shoulders of giants :
+### Standing on the shoulders of giants :
 
