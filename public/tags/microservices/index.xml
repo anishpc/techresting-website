@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Microservices on Techresting</title>
+    <link>https://anishpc.netlify.com/tags/microservices/</link>
+    <description>Recent content in Microservices on Techresting</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 11 Nov 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://anishpc.netlify.com/tags/microservices/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Netflix Hystrix with Spring Cloud</title>
+      <link>https://anishpc.netlify.com/post/hystrix_spring_cloud/</link>
+      <pubDate>Sun, 11 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://anishpc.netlify.com/post/hystrix_spring_cloud/</guid>
+      <description> Circuit Breaker  List  </description>
+    </item>
+    
+  </channel>
+</rss>
