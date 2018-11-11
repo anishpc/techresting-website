@@ -17,7 +17,8 @@
       <pubDate>Sun, 11 Nov 2018 00:00:00 +0000</pubDate>
       
       <guid>https://anishpc.netlify.com/post/hystrix_spring_cloud/</guid>
-      <description> Circuit Breaker  List  </description>
+      <description>Circuit Breaker Michael Nygard in this book &amp;ldquo;Release It&amp;rdquo; talks about the &amp;ldquo;Circuit Breaker&amp;rdquo; stability pattern which works very much inline with electrical circuit breakers which open the circuit on excess usage. Once the usage is back to normal, the circuit should close on its own. The Netflix Hystrix library has been built on this idea of circuit breaker for working with distributed systems.
+Why Now In a single application (monolith or otherwise), failures can be caught as exceptions and handled accordingly.</description>
     </item>
     
   </channel>

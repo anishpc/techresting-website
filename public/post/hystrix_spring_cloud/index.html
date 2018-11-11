@@ -16,21 +16,21 @@
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
     <title>Netflix Hystrix with Spring Cloud - Techresting</title>
     
-<meta name="description" content=" Circuit Breaker  List  ">
+<meta name="description" content="Circuit Breaker Michael Nygard in this book &amp;ldquo;Release It&amp;rdquo; talks about the &amp;ldquo;Circuit Breaker&amp;rdquo; stability pattern which works very much inline with electrical circuit breakers which open the circuit on excess usage. Once the usage is back to normal, the circuit should close on its own. The Netflix Hystrix library has been built on this idea of circuit breaker for working with distributed systems.Why Now In a single application (monolith or otherwise), failures can be caught as exceptions and handled accordingly.">
 
 <meta property="og:title" content="Netflix Hystrix with Spring Cloud - Techresting">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://anishpc.netlify.com/post/hystrix_spring_cloud/">
 <meta property="og:image" content="https://anishpc.netlify.com/images/default.png">
 <meta property="og:site_name" content="Techresting">
-<meta property="og:description" content=" Circuit Breaker  List  ">
+<meta property="og:description" content="Circuit Breaker Michael Nygard in this book &amp;ldquo;Release It&amp;rdquo; talks about the &amp;ldquo;Circuit Breaker&amp;rdquo; stability pattern which works very much inline with electrical circuit breakers which open the circuit on excess usage. Once the usage is back to normal, the circuit should close on its own. The Netflix Hystrix library has been built on this idea of circuit breaker for working with distributed systems.Why Now In a single application (monolith or otherwise), failures can be caught as exceptions and handled accordingly.">
 <meta property="og:locale" content="ja_JP">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="Techresting">
 <meta name="twitter:url" content="https://anishpc.netlify.com/post/hystrix_spring_cloud/">
 <meta name="twitter:title" content="Netflix Hystrix with Spring Cloud - Techresting">
-<meta name="twitter:description" content=" Circuit Breaker  List  ">
+<meta name="twitter:description" content="Circuit Breaker Michael Nygard in this book &amp;ldquo;Release It&amp;rdquo; talks about the &amp;ldquo;Circuit Breaker&amp;rdquo; stability pattern which works very much inline with electrical circuit breakers which open the circuit on excess usage. Once the usage is back to normal, the circuit should close on its own. The Netflix Hystrix library has been built on this idea of circuit breaker for working with distributed systems.Why Now In a single application (monolith or otherwise), failures can be caught as exceptions and handled accordingly.">
 <meta name="twitter:image" content="https://anishpc.netlify.com/images/default.png">
 
 
@@ -65,7 +65,8 @@
         "height": 60
       }
     },
-    "description": " Circuit Breaker  List  "
+    "description": "Circuit Breaker Michael Nygard in this book &ldquo;Release It&rdquo; talks about the &ldquo;Circuit Breaker&rdquo; stability pattern which works very much inline with electrical circuit breakers which open the circuit on excess usage. Once the usage is back to normal, the circuit should close on its own. The Netflix Hystrix library has been built on this idea of circuit breaker for working with distributed systems.
+Why Now In a single application (monolith or otherwise), failures can be caught as exceptions and handled accordingly."
   }
 </script>
 
@@ -132,9 +133,47 @@
 
 <h2 id="circuit-breaker">Circuit Breaker</h2>
 
-<ul>
-<li>List</li>
-</ul>
+<p>Michael Nygard in this book &ldquo;Release It&rdquo; talks about the &ldquo;Circuit Breaker&rdquo; stability pattern which works very much inline with electrical circuit breakers which open the circuit on excess usage. Once the usage is back to normal, the circuit should close on its own.
+The Netflix Hystrix library has been built on this idea of circuit breaker for working with distributed systems.</p>
+
+<hr />
+
+<h2 id="why-now">Why Now</h2>
+
+<p>In a single application (monolith or otherwise), failures can be caught as exceptions and handled accordingly. However, with the wide adoption of microservices, there are a different set of failures which need to be handled for the system to be resilient.
+If we have to go by the book ‘Release It’, Hystrix adopts the following Stability patterns:
+* Circuit Breaker
+* Timeouts (slow responses from downstream applications)
+* Bulkheads
+* Fail fast</p>
+
+<p>Even a monolith application would have a number of dependencies which would be accessible over the network and any one of them could potentially fail. However, in the world of 100s of microservices, critical microservices have about a dozen dependencies in the entire call stack. With such a higher number of distributed dependencies, there is high chance that eventually there is an outage in one of the dependent systems or those dependent systems are running in a degraded fashion.
+Resilient systems are one which isolate the failure and prevent errors in one system from cascading to upstream systems - the common example being pool exhaustion (thread pools/connection pools).</p>
+
+<h2 id="hystrix">Hystrix</h2>
+
+<p>Hystrix was designed to solve these types of failures and provides a dashboard for near-realtime monitoring for operations
+Read this (<a href="https://github.com/Netflix/Hystrix/wiki/FAQ%20:%20General#where-does-the-name-come-from">https://github.com/Netflix/Hystrix/wiki/FAQ%20:%20General#where-does-the-name-come-from</a>) to know where the name comes from.</p>
+
+<h2 id="hystrix-spring-cloud">Hystrix &amp; Spring Cloud</h2>
+
+<p>Spring Cloud’s annotation based approach provides a low-barrier entry to the Netflix Hystrix library, which internally has much complexity built into it.</p>
+
+<h2 id="show-me-the-code">Show me the code</h2>
+
+<p>Dependency:
+1.  To get started : add the following dependency to your pom xml (or accordingly to gradle build file)</p>
+
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-starter-netflix-hystrix&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<ol>
+<li>Add <code>@EnableCircuitBreaker</code> to the <code>SpringApplication</code> class</li>
+<li>Wrap the method which makes the outbound call with <code>@HystrixCommand</code> annotation</li>
+</ol>
 </div>
 
   <footer class="article-footer">
