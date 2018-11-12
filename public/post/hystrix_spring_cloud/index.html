@@ -138,7 +138,7 @@ The Netflix Hystrix library has been built on this idea of circuit breaker for w
 
 <hr />
 
-<h2 id="why-now">Why Now</h2>
+<h3 id="why-now">Why Now</h3>
 
 <p>In a single application (monolith or otherwise), failures can be caught as exceptions and handled accordingly. However, with the wide adoption of microservices, there are a different set of failures which need to be handled for the system to be resilient.
 If we have to go by the book ‘Release It’, Hystrix adopts the following Stability patterns:</p>
@@ -158,25 +158,80 @@ Resilient systems are one which isolate the failure and prevent errors in one sy
 <p>Hystrix was designed to solve these types of failures and provides a dashboard for near-realtime monitoring for operations
 Read this (<a href="https://github.com/Netflix/Hystrix/wiki/FAQ%20:%20General#where-does-the-name-come-from">https://github.com/Netflix/Hystrix/wiki/FAQ%20:%20General#where-does-the-name-come-from</a>) to know where the name comes from.</p>
 
-<h2 id="hystrix-spring-cloud">Hystrix &amp; Spring Cloud</h2>
+<h3 id="hystrix-spring-cloud">Hystrix &amp; Spring Cloud</h3>
 
 <p>Spring Cloud’s annotation based approach provides a low-barrier entry to the Netflix Hystrix library, which internally has much complexity built into it.</p>
 
-<h2 id="show-me-the-code">Show me the code</h2>
+<h3 id="scenario">Scenario</h3>
 
-<p>Dependency:
-1.  To get started : add the following dependency to your pom xml (or accordingly to gradle build file)</p>
+<p>Let&rsquo;s see a scenario in which we display the balance to a user. For this use case, the balance gateway service needs to interact with 3 downstream services :</p>
 
-<pre><code>&lt;dependency&gt;
-    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
-    &lt;artifactId&gt;spring-cloud-starter-netflix-hystrix&lt;/artifactId&gt;
-&lt;/dependency&gt;
-</code></pre>
+<ul>
+<li>Payment Search service</li>
+<li>Billing Gateway</li>
+<li>Loyalty Points service</li>
+</ul>
+
+<p>Here, the diagram below shows the scenario of the Loyalty Points service being not responsive &amp; how Hystrix can help with that scenario.</p>
+
+<p><img src="/img/hystrix_app.png" alt="Balance" /></p>
+
+<h3 id="fallback">Fallback</h3>
+
+<p>Hystrix allows an option in which we can provide an alternate route should the original route not respond. So, in the above case, if the Loyalty Points service does not respond then we can choose to deliver the values from a local cache.</p>
+
+<h4 id="the-user-experience-in-case-of-a-fallback-flow-should-be-discussed-with-stakeholders-in-this-case-of-loyalty-points-being-delivered-from-the-local-cache-there-has-to-be-business-logic-if-that-is-even-allowed-in-this-case-you-have-to-choose-between-not-displaying-loyalty-points-and-displaying-possibly-stale-values-of-loyalty-points-if-it-is-fine-to-display-stale-values-stale-within-a-threshold-then-this-fallback-option-should-be-considered">The user experience in case of a fallback flow should be discussed with stakeholders. In this case of Loyalty Points being delivered from the local cache, there has to be business logic if that is even allowed. In this case, you have to choose between - &ldquo;not displaying loyalty points&rdquo; and &ldquo;displaying possibly stale values of loyalty points&rdquo;. If it is fine to display stale values (stale within a threshold) then this fallback option should be considered.</h4>
+
+<h3 id="show-me-the-code">Show me the code</h3>
 
 <ol>
-<li>Add <code>@EnableCircuitBreaker</code> to the <code>SpringApplication</code> class</li>
-<li>Wrap the method which makes the outbound call with <code>@HystrixCommand</code> annotation</li>
+<li><p><em>Build Dependency :</em>  add the following dependency to your pom xml (or accordingly to gradle build file)
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;dependency&gt;</span>  
+    <span style="color:#f92672">&lt;groupId&gt;</span>org.springframework.cloud<span style="color:#f92672">&lt;/groupId&gt;</span>  
+    <span style="color:#f92672">&lt;artifactId&gt;</span>spring-cloud-starter-netflix-hystrix<span style="color:#f92672">&lt;/artifactId&gt;</span>  
+<span style="color:#f92672">&lt;/dependency&gt;</span>  </code></pre></div></p></li>
+
+<li><p><em>Configure in Spring Cloud :</em>    Add <code>@EnableCircuitBreaker</code> annotation to the <code>SpringApplication</code> class
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">import</span> org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker<span style="color:#f92672">;</span>
+<span style="color:#75715e">// other code
+</span><span style="color:#75715e"></span>
+<span style="display:block;width:100%;background-color:#3c3d38"><span style="color:#a6e22e">@EnableCircuitBreaker</span>
+</span><span style="color:#a6e22e">@SpringBootApplication</span>
+<span style="color:#75715e">//other annotations
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">GatewayApplication</span> <span style="color:#f92672">{</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[]</span> args<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        SpringApplication<span style="color:#f92672">.</span><span style="color:#a6e22e">run</span><span style="color:#f92672">(</span>GatewayApplication<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">,</span> args<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div></p></li>
+
+<li><p><em>Client code :</em> Wrap the method which makes the outbound call with <code>@HystrixCommand</code> annotation</p>
+
+<ul>
+<li>fallback method must be in the same class as the wrapped method</li>
+<li>fallback method must have the same signature of the wrapped method
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">import</span> com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand<span style="color:#f92672">;</span>
+<span style="color:#75715e">// other code
+</span><span style="color:#75715e"></span>
+<span style="display:block;width:100%;background-color:#3c3d38"><span style="color:#a6e22e">@HystrixCommand</span><span style="color:#f92672">(</span>fallbackMethod <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;buildLoyaltyPointsFromCache&#34;</span><span style="color:#f92672">)</span>
+</span><span style="color:#66d9ef">public</span> LoyaltyPointsResponse <span style="color:#a6e22e">retrieveLoyaltyPoints</span><span style="color:#f92672">(</span>String serviceId<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#75715e">// code to invoke the Loyalty Points service
+</span><span style="color:#75715e"></span><span style="color:#f92672">}</span>
+
+<span style="color:#66d9ef">public</span> LoyaltyPointsResponse <span style="color:#a6e22e">buildLoyaltyPointsFromCache</span><span style="color:#f92672">(</span>String serviceId<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+      <span style="color:#75715e">// code to retrieve from local cache
+</span><span style="color:#75715e"></span><span style="color:#f92672">}</span></code></pre></div></li>
+</ul></li>
 </ol>
+
+<p><strong>References : Standing on the shoulders of giants</strong></p>
+
+<ul>
+<li><a href="https://pragprog.com/book/mnee2/release-it-second-edition">Book - Release It (by Michael Nygard)</a>  (highly recommended)</li>
+<li><a href="https://github.com/Netflix/Hystrix/wiki">Netflix Hystrix wiki</a></li>
+<li><a href="https://martinfowler.com/bliki/CircuitBreaker.html">Martin Fowler on Circuit Breakers</a></li>
+<li><a href="https://www.manning.com/books/spring-microservices-in-action">Book - Spring Microservices in Action (by John Carnell)</a></li>
+</ul>
 </div>
 
   <footer class="article-footer">
