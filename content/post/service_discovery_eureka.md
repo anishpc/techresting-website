@@ -13,7 +13,7 @@ categories:
 highlight: "true"
 ---
 
-*** Service Discovery
+## Service Discovery
 
 ## Why/How
 
@@ -21,14 +21,14 @@ In traditional (prior microservices) systems, there would be a fixed number of s
 
 However, services designed to be cloud-native can fail,scale in and out. Also, microservices are increasingly being deployed in a containerized environment. In such a dynamic environment, a fixed set of host-port information doesn't scale.
 
-*** Types of Service Discovery:
-**** Client-side Service Discovery: 
+## Types of Service Discovery:
+#### Client-side Service Discovery: 
 This has the common approach of configuring the host-port details of the services in the consuming applications. The client uses that host-port details to invoke the service, typically in a round-robin fashion. In this case, there are no health checks for the downstream services and its upto the consuming client to implement some functionality if the client is not able to reach a particular service instance
 
-**** Load Balancer-Based Service Discovery:
+#### Load Balancer-Based Service Discovery:
 In this pattern, the consuming applications configure a load-balancer DNS name, typically, in the application property files. Here, the load balancer would perform the routing. Also, the load balancer can have health checks and other level-7 smarts. In AWS, the Application Load Balancer (ALB) provides routing based on different set of rules like zones, content-based amongst others. The consuming application does not need to know about the routing logic or any load-balancing.
 
-**** DNS Based Service Discovery:
+#### DNS Based Service Discovery:
 DNS can have different routing policies like latency, geolocation. For the AWS DNS solution -- Route53, here is the entire list of routing policies. https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html. DNS based discovery differ in how the values expire and in turn, how the values are provided to the applications trying to retrieve the service information.
 
 **** Registry based Service Discovery:
