@@ -41,14 +41,65 @@ The Service Discovery solution provided by Netflix for this pattern is Eureka. O
 
 ![Balance](/img/eureka.png)
 
+Services : 
+* In the above example, the services -- 'Payment Search', 'Billing Service' & 'Loyalty Points Svc' would register with the Eureka server when these individual service instances come online. As shown in the image, there could be multiple instances of each of those services. Each service instance would send its own metadata when registering with the Eureka server. The default metadata information include hostname, IP address, port numbers, status page and health check.
+* Each of the service instance would send a regular heartbeat message 
 
 
-#### Using Eureka for the services
 
-*Build Dependency :*  add the following dependency to your pom xml (or accordingly to gradle build file)
+#### Using Eureka Client 
+
+This is the configuration which would be used in the services which would lookup details of other services which it needs to interact. The information is looked up from Eureka Server.
+
+1.	*Build Dependency :*  add the following dependency to your pom xml (or accordingly to gradle build file)
 {{< highlight xml >}}
 <dependency>  
     <groupId>org.springframework.cloud</groupId>  
-    <artifactId>spring-cloud-starter-eureka</artifactId>  
-</dependency>  
+    <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>  
+</dependency>
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
+</dependency>
+{{< / highlight >}}
+or select "Eureka Discovery" & "Ribbon" when starting a project from https://start.spring.io/ page.
+
+2. *Configure in Spring Cloud :*	Add `@EnableDiscoveryClient` annotation to the `SpringApplication` class
+{{< highlight java "hl_lines=4" >}}
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestTemplate;
+// other code
+
+@EnableDiscoveryClient
+@SpringBootApplication
+//other annotations
+public class GatewayApplication {
+
+    @LoadBalanced
+	@Bean
+	RestTemplate restTemplate() {
+		return new RestTemplate();
+	}
+
+    public static void main(String[] args) {
+        SpringApplication.run(GatewayApplication.class, args);
+    }
+}
+{{< / highlight >}}
+
+3. *Invoking other services :*      Use the service names to refer to the service host name. The actual host & port details would be used from Eureka
+{{< highlight java "hl_lines=6" >}}
+public class BalanceGatewayService {
+    @Autowired
+    private RestTemplate restTemplate;
+
+    public LoyaltyPoints buildLoyaltyPointsBalance(String phoneNumber) {
+        LoyaltyPointsDetails loyaltyPoints = restTemplate.getForObject("http://loyalty-points-svc/phone-number/{phoneNumber}", LoyaltyPointsDetails.class, phoneNumber);
+        // more code
+    }        
+}
+
+
 {{< / highlight >}}
