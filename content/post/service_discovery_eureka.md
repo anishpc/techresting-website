@@ -65,7 +65,7 @@ This is the configuration which would be used in the services which would lookup
 or select "Eureka Discovery" & "Ribbon" when starting a project from https://start.spring.io/ page.
 
 2. *Configure in Spring Cloud :*	Add `@EnableDiscoveryClient` annotation to the `SpringApplication` class
-{{< highlight java "hl_lines=4" >}}
+{{< highlight java >}}
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
