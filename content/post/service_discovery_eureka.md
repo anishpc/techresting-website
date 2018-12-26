@@ -146,3 +146,8 @@ feign:
         readTimeout: 5000
 {{< / highlight >}}
 Use the value of `default` instead of `loyalty-points-svc`, to make this configuration for all Feign clients
+
+**References : Standing on the shoulders of giants**
+* [Netflix Eureka Wiki](https://github.com/Netflix/eureka/wiki)
+* [Spring Cloud Guide] (https://cloud.spring.io/spring-cloud-static/spring-cloud.html#_service_discovery_eureka_clients)
+* [Nginx Microservices Guide] (https://www.nginx.com/blog/service-discovery-in-a-microservices-architecture/)  
