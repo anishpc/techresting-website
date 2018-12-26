@@ -117,7 +117,7 @@ or select `Feign` from when starting a project from https://start.spring.io/ pag
 
 2. *Client defintition for Feign* - The BalanceGatewayService would be invoking the 'LoyaltyPointsService'. So, in the 'BalanceGatewayService', we need to define the client which is similar to the 'LoyaltyPointsService' interface.
 {{< highlight java >}}
-@FeignClient(name = "loyalty-points-svc", configuration = FeignConfiguration.class)
+@FeignClient(name="loyalty-points-svc",configuration=FeignConfiguration.class)
 public interface GatewayDemoClient {
     @GetMapping("/balance")
     Balance getBalance();
@@ -130,11 +130,10 @@ public interface GatewayDemoClient {
 public class FeignConfiguration {
     @Bean
     public IRule ribbonRule() {
-        return new WeightedResponseTimeRule();  //
+        return new WeightedResponseTimeRule();  
     }
 }
 {{< / highlight >}}
-
 `WeightedResponseTimeRule` - Initially, the requests are load balanced amongst the server instances of `loyalty-points-svc`. However, the instances with shorter response times would be given more weightage and over a period of time, the instances with shorter response times would be preferred.
 
 4. *Property file configuration* - In `application.yml`, the properties for Feign can be configured as below:
