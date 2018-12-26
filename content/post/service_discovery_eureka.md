@@ -1,5 +1,5 @@
 ---
-title: "Service Discovery with Netflix Eureka (with Netflix Ribbon)"
+title: "Service Discovery with Netflix Eureka (with Netflix Ribbon & Feign)"
 date: "2018-12-11"
 description: ""
 tags: 
