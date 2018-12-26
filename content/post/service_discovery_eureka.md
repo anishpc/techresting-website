@@ -47,9 +47,11 @@ Services :
 
 
 
-#### Using Eureka Client 
+#### Using Eureka Client with Ribbon
 
 This is the configuration which would be used in the services which would lookup details of other services which it needs to interact. The information is looked up from Eureka Server.
+
+Ribbon is a client-side load-balancer. Feign uses Ribbon under the hood & with Spring Cloud, Feign provides a load balanced http client.
 
 1.	*Build Dependency :*  add the following dependency to your pom xml (or accordingly to gradle build file)
 {{< highlight xml >}}
@@ -89,8 +91,8 @@ public class GatewayApplication {
 }
 {{< / highlight >}}
 
-3. *Invoking other services :*      Use the service names to refer to the service host name. The actual host & port details would be used from Eureka
-{{< highlight java "hl_lines=6" >}}
+3. *Invoking other services :*      Use the service names to refer to the service host name `loyalty-points-svc`. The actual host & port details would be used from Eureka
+{{< highlight java >}}
 public class BalanceGatewayService {
     @Autowired
     private RestTemplate restTemplate;
@@ -100,6 +102,48 @@ public class BalanceGatewayService {
         // more code
     }        
 }
-
-
 {{< / highlight >}}
+
+
+#### Using Eureka Client with Feign Client
+1. *Dependency for Feign*
+{{< highlight xml >}}
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-openfeign</artifactId>
+</dependency>
+{{< / highlight >}}
+or select `Feign` from when starting a project from https://start.spring.io/ page.
+
+2. *Client defintition for Feign* - The BalanceGatewayService would be invoking the 'LoyaltyPointsService'. So, in the 'BalanceGatewayService', we need to define the client which is similar to the 'LoyaltyPointsService' interface.
+{{< highlight java >}}
+@FeignClient(name = "loyalty-points-svc", configuration = FeignConfiguration.class)
+public interface GatewayDemoClient {
+    @GetMapping("/balance")
+    Balance getBalance();
+}
+{{< / highlight >}}
+
+3. *Customizing Feign Configuration* -- Configuration for Feign can be customized in the class provided with the `configuration` attribute for the `@FeignClient` annotation. 
+{{< highlight java >}}
+@Configuration
+public class FeignConfiguration {
+    @Bean
+    public IRule ribbonRule() {
+        return new WeightedResponseTimeRule();  //
+    }
+}
+{{< / highlight >}}
+
+`WeightedResponseTimeRule` - Initially, the requests are load balanced amongst the server instances of `loyalty-points-svc`. However, the instances with shorter response times would be given more weightage and over a period of time, the instances with shorter response times would be preferred.
+
+4. *Property file configuration* - In `application.yml`, the properties for Feign can be configured as below:
+{{< highlight java >}}
+feign:
+  client:
+    config:
+      loyalty-points-svc:
+        connectTimeout: 5000
+        readTimeout: 5000
+{{< / highlight >}}
+Use the value of `default` instead of `loyalty-points-svc`, to make this configuration for all Feign clients
