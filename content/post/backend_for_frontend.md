@@ -44,3 +44,5 @@ Evolution of BFF services could lead to business-logic creep - where the core bu
 * [Sam Newman](https://samnewman.io/patterns/architectural/bff/)
 * [Phil Calçado @ SoundCloud](http://philcalcado.com/2015/09/18/the_back_end_for_front_end_pattern_bff.html)
 * [Lukasz Plotnicki @ ThoughtWorks](https://www.thoughtworks.com/insights/blog/bff-soundcloud)
+
+
