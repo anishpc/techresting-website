@@ -27,9 +27,10 @@ Phil Calçado/Sam Newman have talked about the use of Back-end for Front-end arc
 We created a generic Balance operation API which provided detailed information about the balance & other related information. This service encapsulated all domain-specific information to capture a customer's balance information.
 
 Below is the diagram which we reached after splitting the services based on Backend-For-Frontend pattern.
+![Balance](/img/bff_after.png)
 
 ## Points to consider
-* The client-specific microservice would be maintained & developed by the client team. 
+#### The client-specific microservice would be maintained & developed by the client team. 
     * The consequence of this is that, the mobile team can manage the mobile-BFF service independently of the generic-service and also independent of other channels. 
     * This can lead to business-logic creep - where the core business-domain logic which should have been in the generic service is now spread across channel-specific BFF services which can cause functionality to differ across channels. If there is a functionality which is not specific to that channel then there has to be co-ordination with the generic team and other channels on the implementation approach.
 
