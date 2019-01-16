@@ -16,12 +16,13 @@ highlight: "true"
 
 Michael Nygard in this book "Release It" talks about the "Circuit Breaker" stability pattern which works very much inline with electrical circuit breakers which open the circuit on excess usage. Once the usage is back to normal, the circuit should close on its own.
 The Netflix Hystrix library has been built on this idea of circuit breaker for working with distributed systems.
+The key idea is that if a service is experiencing not responsive or responding in a degraded manner, it should be given time to recover instead of overloading it with more requests.
 
 ***
 
 ### Why Now
 
-In a single application (monolith or otherwise), failures can be caught as exceptions and handled accordingly. However, with the wide adoption of microservices, there are a different set of failures which need to be handled for the system to be resilient.
+In a single application (monolith or otherwise), failures can be caught as exceptions and handled accordingly. However, with the wide adoption of microservices, there is a different set of failures which needs to be handled for the system to be resilient.
 If we have to go by the book ‘Release It’, Hystrix adopts the following Stability patterns:
 
 * Circuit Breaker
@@ -34,8 +35,8 @@ Resilient systems are one which isolate the failure and prevent errors in one sy
 
 ## Hystrix
 
+This details the origin of the name : https://github.com/Netflix/Hystrix/wiki/FAQ%20:%20General#where-does-the-name-come-from
 Hystrix was designed to solve these types of failures and provides a dashboard for near-realtime monitoring for operations
-Read this (https://github.com/Netflix/Hystrix/wiki/FAQ%20:%20General#where-does-the-name-come-from) to know where the name comes from.
 
 ### Hystrix & Spring Cloud
 
@@ -101,6 +102,8 @@ public LoyaltyPointsResponse buildLoyaltyPointsFromCache(String serviceId) {
 }
 {{< / highlight >}}
 
+## Alternative Library
+* [Resilience4j](https://github.com/resilience4j/resilience4j) is a library which as per the Github is *Fault Tolerance library designed for functional programming*
 
 **References : Standing on the shoulders of giants**
 
